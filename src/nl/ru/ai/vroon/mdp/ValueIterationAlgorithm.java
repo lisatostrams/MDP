@@ -56,7 +56,7 @@ public class ValueIterationAlgorithm {
 
     public void update(Experience e) {
         double opt = e.r + gamma * maxQ_s_a(e.x_new, e.y_new); 
-        Q[e.x][e.y][Action.valueOf(e.a.name()).ordinal()] += (1 / mdp.getActionsCounter()) * (opt - Q[e.x][e.y][Action.valueOf(e.a.name()).ordinal()]);
+        Q[e.x][e.y][Action.valueOf(e.a.name()).ordinal()] += (1 / mdp.getActionsCounter()+1) * (opt - Q[e.x][e.y][Action.valueOf(e.a.name()).ordinal()]);
         V[e.x][e.y] = opt;
     }
 

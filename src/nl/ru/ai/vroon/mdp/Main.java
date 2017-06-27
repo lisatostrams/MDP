@@ -16,7 +16,7 @@ public class Main {
 		mdp.setInitialState(0, 0);
                 ValueIterationAlgorithm via = new ValueIterationAlgorithm(mdp);
                 System.out.println(via.toString());
-		for (int i = 0; i < 100; i++){
+		for (int i = 0; i < 50; i++){
                         via.experience(Action.UP); 
 			via.experience(Action.UP);
 			via.experience(Action.RIGHT);

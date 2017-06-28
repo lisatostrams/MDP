@@ -16,14 +16,10 @@ public class Main {
 		mdp.setInitialState(0, 0);
                 ValueIterationAlgorithm via = new ValueIterationAlgorithm(mdp);
                 System.out.println(via.toString());
-		for (int i = 0; i < 50; i++){
-                        via.experience(Action.UP); 
-			via.experience(Action.UP);
-			via.experience(Action.RIGHT);
-			via.experience(Action.RIGHT);
-			via.experience(Action.RIGHT);
-                        via.experience(Action.UP); 
+		for (int i = 0; i < 10; i++){
+                        via.update();
                         System.out.println(via.toString());
+                        System.out.println(via.policy());
 			mdp.restart();
 		}
                 System.out.println(via.toString());

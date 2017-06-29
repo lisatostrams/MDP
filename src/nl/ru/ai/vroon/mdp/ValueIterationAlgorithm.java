@@ -5,6 +5,7 @@
  */
 package nl.ru.ai.vroon.mdp;
 
+import static java.lang.Math.abs;
 import java.util.Vector;
 
 /**
@@ -13,14 +14,15 @@ import java.util.Vector;
  */
 public class ValueIterationAlgorithm {
 
-    double[][] V;
-    double[][][] Q;
-    int width;
-    int height;
-    int actions = Action.values().length;
-    double gamma = 0.8;
-    MarkovDecisionProblem mdp;
-
+    private double[][] V;
+    private double[][][] Q;
+    private int width;
+    private int height;
+    private int actions = Action.values().length;
+    private double gamma = 0.8;
+    private MarkovDecisionProblem mdp;
+    private double delta = 0.1;
+    private boolean convergence = false; 
     public ValueIterationAlgorithm(MarkovDecisionProblem mpd) {
         width = mpd.getWidth();
         height = mpd.getHeight();
@@ -45,6 +47,7 @@ public class ValueIterationAlgorithm {
     }
 
     public void update() {
+        convergence = true; 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 mdp.setState(x, y);
@@ -53,12 +56,18 @@ public class ValueIterationAlgorithm {
                 }
 
                 double opt = maxQ_s_a(x, y);
-
+                if(abs(V[x][y] - opt) > delta) {
+                    convergence = false; 
+                }
                 V[x][y] = opt;
 
             }
         }
 
+    }
+    
+    public boolean converged() {
+        return convergence; 
     }
 
     private double sum_T_R_V(Action action) {
@@ -113,7 +122,7 @@ public class ValueIterationAlgorithm {
 
     @Override
     public String toString() {
-        String str = "";
+        String str = "V(S) = \n";
         for (int i = height - 1; i >= 0; i--) {
             for (int j = 0; j < width; j++) {
                 str += ("| " + String.format("% 1.3f", V[j][i]) + " |");
@@ -125,7 +134,7 @@ public class ValueIterationAlgorithm {
     }
 
     public String policy() {
-        String str = "";
+        String str = "Policy p(S) = \n";
         for (int i = height - 1; i >= 0; i--) {
             for (int j = 0; j < width; j++) {
                 if(max_argQ_s_a(j,i)==null) str += ("|       |");

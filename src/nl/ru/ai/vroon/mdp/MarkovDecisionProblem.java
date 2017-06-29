@@ -55,7 +55,7 @@ public class MarkovDecisionProblem {
     // The DrawFrame this MDP uses to draw itself
     private DrawFrame frame = null;
     // The time that is waited between drawing each action performed:
-    private int waittime = 500;
+    private int waittime = 10;
     private boolean showProgress = true;
 
     // Counts the number of actions that has been performed

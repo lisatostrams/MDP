@@ -55,7 +55,7 @@ public class MarkovDecisionProblem {
     // The DrawFrame this MDP uses to draw itself
     private DrawFrame frame = null;
     // The time that is waited between drawing each action performed:
-    private int waittime = 500;
+    private int waittime = 10;
     private boolean showProgress = true;
 
     // Counts the number of actions that has been performed
@@ -63,7 +63,7 @@ public class MarkovDecisionProblem {
 
     private Action recentaction;
 
-	/////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
     /// FUNCTIONS
     /////////////////////////////////////////////////////////
     /**
@@ -156,7 +156,9 @@ public class MarkovDecisionProblem {
      */
     public double performAction(Action action) {
         // If we are working deterministic, the action is performed
-        if(isTerminated()) return getReward(); 
+        if (isTerminated()) {
+            return getReward();
+        }
         if (deterministic) {
             doAction(action);
         } else {
@@ -202,7 +204,7 @@ public class MarkovDecisionProblem {
         if (performed) {
             recentaction = action;
         } else {
-            recentaction = null; 
+            recentaction = null;
         }
     }
 
@@ -289,7 +291,7 @@ public class MarkovDecisionProblem {
         return 0;
     }
 
-	/////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
     /// SETTERS
     /////////////////////////////////////////////////////////
     public void setActionSteps(int s) {
@@ -324,6 +326,11 @@ public class MarkovDecisionProblem {
     public void setState(int xpos, int ypos) {
         xPosition = xpos;
         yPosition = ypos;
+        if (landscape[xpos][ypos] == Field.EMPTY) {
+            terminated = false;
+        } else {
+            terminated = true; 
+        }
         pDrawMDP();
     }
 
@@ -403,9 +410,120 @@ public class MarkovDecisionProblem {
         this.noReward = noReward;
     }
 
-	/////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
     /// GETTERS
     /////////////////////////////////////////////////////////
+    public double getP_action() {
+
+        return pPerform;
+    }
+
+    public double getP_sidestep() {
+        return pSidestep / 2;
+    }
+
+    public double getP_backstep() {
+        return pBackstep;
+    }
+
+    public double getReward(int x, int y) {
+        // If we are terminated, no rewards can be gained anymore (i.e. every action is futile):
+//        if (terminated) {
+//            return 0;
+//        }
+
+        switch (landscape[x][y]) {
+            case EMPTY:
+                return noReward;
+            case REWARD:
+                
+                return posReward;
+            case NEGREWARD:
+                
+                return negReward;
+        }
+
+        // If something went wrong:
+        System.err.println("ERROR: MDP: getReward(): agent is not in an empty, reward or negreward field...");
+        return 0;
+    }
+
+    public double getR_a_s(Action a) {
+        if(terminated) return 0; 
+        switch (a) {
+            case UP:
+                if (yPosition < (height - 1) && landscape[xPosition][yPosition + 1] != Field.OBSTACLE) {
+                    return getReward(xPosition, yPosition + 1);
+                }
+                return getReward(xPosition, yPosition);
+            case DOWN:
+                if (yPosition > 0 && landscape[xPosition][yPosition - 1] != Field.OBSTACLE) {
+
+                    return getReward(xPosition, yPosition - 1);
+                }
+                return getReward(xPosition, yPosition);
+            case LEFT:
+                if (xPosition > 0 && landscape[xPosition - 1][yPosition] != Field.OBSTACLE) {
+
+                    return getReward(xPosition - 1, yPosition);
+                }
+                return getReward(xPosition, yPosition);
+            case RIGHT:
+                if (xPosition < (width - 1) && landscape[xPosition + 1][yPosition] != Field.OBSTACLE) {
+                    return getReward(xPosition + 1, yPosition);
+                }
+                return getReward(xPosition, yPosition);
+
+        }
+        return 0;
+    }
+
+    public int getX_a(Action a) {
+        if(terminated) return xPosition; 
+        switch (a) {
+            case UP:
+
+            case DOWN:
+                return xPosition;
+            case LEFT:
+                if (xPosition > 0 && landscape[xPosition - 1][yPosition] != Field.OBSTACLE) {
+
+                    return xPosition - 1;
+                }
+                return xPosition;
+            case RIGHT:
+                if (xPosition < (width - 1) && landscape[xPosition + 1][yPosition] != Field.OBSTACLE) {
+                    return xPosition + 1;
+                }
+                return xPosition;
+
+        }
+        return xPosition;
+    }
+
+    public int getY_a(Action a) {
+        if(terminated) return yPosition; 
+        switch (a) {
+            case UP:
+                if (yPosition < (height - 1) && landscape[xPosition][yPosition + 1] != Field.OBSTACLE) {
+                    return yPosition + 1;
+                }
+                return yPosition;
+            case DOWN:
+                if (yPosition > 0 && landscape[xPosition][yPosition - 1] != Field.OBSTACLE) {
+
+                    return yPosition - 1;
+                }
+                return yPosition;
+            case LEFT:
+
+            case RIGHT:
+                return yPosition;
+
+        }
+        return yPosition;
+    }
+
     /**
      * Returns the x-position of the current state
      *
@@ -491,7 +609,7 @@ public class MarkovDecisionProblem {
         return recentaction;
     }
 
-	/////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
     /// DISPLAY STUFF
     /////////////////////////////////////////////////////////
     /**

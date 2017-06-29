@@ -5,6 +5,7 @@
  */
 package nl.ru.ai.vroon.mdp;
 
+import static java.lang.Math.abs;
 import java.util.Vector;
 
 /**
@@ -13,14 +14,15 @@ import java.util.Vector;
  */
 public class ValueIterationAlgorithm {
 
-    double[][] V;
-    double[][][] Q;
-    int width;
-    int height;
-    int actions = Action.values().length;
-    double gamma = 0.8;
-    MarkovDecisionProblem mdp;
-
+    private double[][] V;
+    private double[][][] Q;
+    private int width;
+    private int height;
+    private int actions = Action.values().length;
+    private double gamma = 0.8;
+    private MarkovDecisionProblem mdp;
+    private double delta = 0.1;
+    private boolean convergence = false; 
     public ValueIterationAlgorithm(MarkovDecisionProblem mpd) {
         width = mpd.getWidth();
         height = mpd.getHeight();
@@ -44,59 +46,104 @@ public class ValueIterationAlgorithm {
         }
     }
 
-    public void experience(Action a) {
-        int x = mdp.getStateXPosition();
-        int y = mdp.getStateYPostion();
-        double r = mdp.performAction(a);
-        int x_ = mdp.getStateXPosition();
-        int y_ = mdp.getStateYPostion();
+    public void update() {
+        convergence = true; 
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                mdp.setState(x, y);
+                for (int a = 0; a < actions; a++) {
+                    Q[x][y][a] = sum_T_R_V(Action.values()[a]);
+                }
 
-        update(new Experience(x, y, a, r, x_, y_));
+                double opt = maxQ_s_a(x, y);
+                if(abs(V[x][y] - opt) > delta) {
+                    convergence = false; 
+                }
+                V[x][y] = opt;
+
+            }
+        }
+
+    }
+    
+    public boolean converged() {
+        return convergence; 
     }
 
-    public void update(Experience e) {
-        double opt = e.r + gamma * maxQ_s_a(e.x_new, e.y_new); 
-        Q[e.x][e.y][Action.valueOf(e.a.name()).ordinal()] += (1 / mdp.getActionsCounter()+1) * (opt - Q[e.x][e.y][Action.valueOf(e.a.name()).ordinal()]);
-        V[e.x][e.y] = opt;
+    private double sum_T_R_V(Action action) {
+        double sum = 0;
+        for (int a = 0; a < actions; a++) {
+            double prob = 0;
+
+            if (Action.values()[a] == action) {
+                prob = mdp.getP_action();
+            }
+            if (Action.values()[a] == Action.nextAction(action) || Action.values()[a] == Action.previousAction(action)) {
+                prob = mdp.getP_sidestep();
+            }
+            if (Action.values()[a] == Action.backAction(action)) {
+                prob = mdp.getP_backstep();
+            }
+
+            sum += (prob * (mdp.getR_a_s(Action.values()[a]) + V[mdp.getX_a(Action.values()[a])][mdp.getY_a(Action.values()[a])]));
+        }
+        return sum;
+
     }
 
     private double maxQ_s_a(int x, int y) {
-        if(mdp.isTerminated()) return 0; 
-        MarkovDecisionProblem temp = mdp;
-        mdp.setShowProgress(false);
-        int k = mdp.getActionsCounter();
-        Action max = Action.values()[0];
+
         double mv = -1000000;
         for (int a = 0; a < actions; a++) {
-            double r = temp.performAction(Action.values()[a]);
+            double v = Q[x][y][a];
+            if (v > mv) {
+                mv = v;
 
-            double v = Q[x][y][a] + (1 / k + 1) * (r + (gamma * V[x][y]) - Q[x][y][a]);
+            }
 
+        }
+        return mv;
+    }
+    private Action max_argQ_s_a(int x, int y) {
+        double mv = -1000000;
+        Action max = null;
+        for (int a = 0; a < actions; a++) {
+            double v = Q[x][y][a];
             if (v > mv) {
                 mv = v;
                 max = Action.values()[a];
+
             }
-            if (temp.getAction() != null) {
-                temp.doAction(Action.backAction(temp.getAction()));
-            }
-            temp.setTerminated();
 
         }
-        mdp.setShowProgress(true);
-        mdp.setActionSteps(k);
-        return mv;
+        if(mv==0) return null; 
+        return max;
     }
 
     @Override
     public String toString() {
-        String str = "";
+        String str = "V(S) = \n";
         for (int i = height - 1; i >= 0; i--) {
             for (int j = 0; j < width; j++) {
-                str += ("| " + String.format("%1.3f", V[j][i]) + " |");
+                str += ("| " + String.format("% 1.3f", V[j][i]) + " |");
             }
             str += "\n";
         }
         return str;
 
     }
+
+    public String policy() {
+        String str = "Policy p(S) = \n";
+        for (int i = height - 1; i >= 0; i--) {
+            for (int j = 0; j < width; j++) {
+                if(max_argQ_s_a(j,i)==null) str += ("|       |");
+                //String.format("%1$"+5+"s", max_argQ_s_a(j,i).toString());
+                else str += ("| " + String.format("%1$"+5+"s", max_argQ_s_a(j,i).toString()) + " |");
+            }
+            str += "\n";
+        }
+        return str;
+    }
+
 }

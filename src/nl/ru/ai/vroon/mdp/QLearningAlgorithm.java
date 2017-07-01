@@ -20,8 +20,10 @@ public class QLearningAlgorithm {
     private int actions = Action.values().length;
     private double gamma = 0.9;
     private MarkovDecisionProblem mdp;
-    private double epsilon = 0.2;
+    private double epsilon = 0.1;
     private boolean greedy_epsilon = false;
+    private double totalr;
+    private Log log;
 
     Random rand = new Random();
 
@@ -33,6 +35,8 @@ public class QLearningAlgorithm {
 
         this.mdp = mpd;
         initializeQ();
+        String mdpname = "Q_learning_" + width + "x" + height + "_gamma_" + gamma + "_epsilon_" + epsilon;
+        log = new Log(mdpname);
 
     }
 
@@ -93,7 +97,7 @@ public class QLearningAlgorithm {
         String str = "";
         for (int i = height - 1; i >= 0; i--) {
             for (int j = 0; j < width; j++) {
-                str += ("| " + String.format("%1.3f", maxQ_s_a(j, i)) + " |");
+                str += ("| " + String.format("%+1.3f", maxQ_s_a(j, i)) + " |");
             }
             str += "\n";
         }
@@ -109,16 +113,16 @@ public class QLearningAlgorithm {
                     str += ("|       |");
                 } //String.format("%1$"+5+"s", max_argQ_s_a(j,i).toString());
                 else {
-                    str += ("| " + String.format("%1$" + 5 + "s", max_argQ_s_a(j, i).toString()) + " |");
+                    str += ("| " + String.format("%1$" + 6 + "s", max_argQ_s_a(j, i).toString()) + " |");
                 }
             }
             str += "\n";
         }
         return str;
     }
-    
+
     public void setGreedyEpsilon(boolean set) {
-        greedy_epsilon = set; 
+        greedy_epsilon = set;
     }
 
     public Action policy_currentState() {
@@ -134,5 +138,52 @@ public class QLearningAlgorithm {
             }
         }
         return max_argQ_s_a(mdp.getStateXPosition(), mdp.getStateYPostion());
+    }
+
+    public int walkPolicyPath() {
+        int pathlength = 0;
+        totalr = 0;
+        mdp.restart();
+        mdp.setDeterministic();
+        mdp.setShowProgress(false);
+        while (!mdp.isTerminated() && pathlength < 100) {
+            Action action = max_argQ_s_a(mdp.getStateXPosition(), mdp.getStateYPostion());
+            totalr += mdp.performAction(action);
+            pathlength++;
+        }
+        return pathlength;
+
+    }
+
+    public String simulate100ProbabilisticRuns() {
+        mdp.setStochastic();
+        double av_path = 0;
+        double av_reward = 0;
+        for (int i = 0; i < 100; i++) {
+            int pathlength = 0;
+            double r = 0;
+            mdp.restart();
+
+            mdp.setShowProgress(false);
+            while (!mdp.isTerminated() && pathlength <100) {
+                Action action = max_argQ_s_a(mdp.getStateXPosition(), mdp.getStateYPostion());
+                r += mdp.performAction(action);
+                pathlength++;
+            }
+            av_path += pathlength;
+            av_reward += r;
+        }
+        return "100 simulated runs of probabilistic agent results in: \n Average pathlength: " + av_path / 100 + " \n Average reward: " + av_reward / 100;
+
+    }
+
+    public void finish() {
+        log.write(this.toString());
+        log.write(this.policy());
+        log.write("Minimum length of path to goal: " + walkPolicyPath());
+        log.write("Maximum total reward of path: " + totalr);
+        log.write(this.simulate100ProbabilisticRuns());
+        log.close();
+
     }
 }

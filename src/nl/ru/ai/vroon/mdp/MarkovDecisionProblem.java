@@ -609,6 +609,9 @@ public class MarkovDecisionProblem {
         return recentaction;
     }
 
+    
+    
+    
     /////////////////////////////////////////////////////////
     /// DISPLAY STUFF
     /////////////////////////////////////////////////////////
@@ -669,5 +672,7 @@ public class MarkovDecisionProblem {
     public void setShowProgress(boolean show) {
         showProgress = show;
     }
+    
+    
 
 }

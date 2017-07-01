@@ -22,7 +22,11 @@ public class ValueIterationAlgorithm {
     private double gamma = 0.8;
     private MarkovDecisionProblem mdp;
     private double delta = 0.1;
-    private boolean convergence = false; 
+    private boolean convergence = false;
+    private double totalr = 0;
+    Log log;
+    int count = 0;
+
     public ValueIterationAlgorithm(MarkovDecisionProblem mpd) {
         width = mpd.getWidth();
         height = mpd.getHeight();
@@ -32,6 +36,8 @@ public class ValueIterationAlgorithm {
 
         this.mdp = mpd;
         initializeVQ();
+        String mdpname = "Value_Iteration_" + width + "x" + height + "_gamma_" + gamma;
+        log = new Log(mdpname);
 
     }
 
@@ -47,17 +53,18 @@ public class ValueIterationAlgorithm {
     }
 
     public void update() {
-        convergence = true; 
+        convergence = true;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 mdp.setState(x, y);
                 for (int a = 0; a < actions; a++) {
                     Q[x][y][a] = sum_T_R_V(Action.values()[a]);
+                    count++;
                 }
 
                 double opt = maxQ_s_a(x, y);
-                if(abs(V[x][y] - opt) > delta) {
-                    convergence = false; 
+                if (abs(V[x][y] - opt) > delta) {
+                    convergence = false;
                 }
                 V[x][y] = opt;
 
@@ -65,9 +72,9 @@ public class ValueIterationAlgorithm {
         }
 
     }
-    
+
     public boolean converged() {
-        return convergence; 
+        return convergence;
     }
 
     private double sum_T_R_V(Action action) {
@@ -104,6 +111,7 @@ public class ValueIterationAlgorithm {
         }
         return mv;
     }
+
     private Action max_argQ_s_a(int x, int y) {
         double mv = -1000000;
         Action max = null;
@@ -116,7 +124,9 @@ public class ValueIterationAlgorithm {
             }
 
         }
-        if(mv==0) return null; 
+        if (mv == 0) {
+            return null;
+        }
         return max;
     }
 
@@ -125,7 +135,7 @@ public class ValueIterationAlgorithm {
         String str = "V(S) = \n";
         for (int i = height - 1; i >= 0; i--) {
             for (int j = 0; j < width; j++) {
-                str += ("| " + String.format("% 1.3f", V[j][i]) + " |");
+                str += ("| " + String.format("%+1.3f", V[j][i]) + " |");
             }
             str += "\n";
         }
@@ -137,13 +147,63 @@ public class ValueIterationAlgorithm {
         String str = "Policy p(S) = \n";
         for (int i = height - 1; i >= 0; i--) {
             for (int j = 0; j < width; j++) {
-                if(max_argQ_s_a(j,i)==null) str += ("|       |");
-                //String.format("%1$"+5+"s", max_argQ_s_a(j,i).toString());
-                else str += ("| " + String.format("%1$"+5+"s", max_argQ_s_a(j,i).toString()) + " |");
+                if (max_argQ_s_a(j, i) == null) {
+                    str += ("|       |");
+                } //String.format("%1$"+5+"s", max_argQ_s_a(j,i).toString());
+                else {
+                    str += ("| " + String.format("%1$" + 6 + "s", max_argQ_s_a(j, i).toString()) + " |");
+                }
             }
             str += "\n";
         }
         return str;
+    }
+
+    public int walkPolicyPath() {
+        int pathlength = 0;
+        totalr = 0;
+        mdp.restart();
+        mdp.setDeterministic();
+        mdp.setShowProgress(true);
+        while (!mdp.isTerminated()) {
+            Action action = max_argQ_s_a(mdp.getStateXPosition(), mdp.getStateYPostion());
+            totalr += mdp.performAction(action);
+            pathlength++;
+        }
+        return pathlength;
+
+    }
+
+    public String simulate100ProbabilisticRuns() {
+        mdp.setStochastic();
+        double av_path = 0;
+        double av_reward = 0;
+        for (int i = 0; i < 100; i++) {
+            int pathlength = 0;
+            double r = 0;
+            mdp.restart();
+            
+            mdp.setShowProgress(false);
+            while (!mdp.isTerminated()) {
+                Action action = max_argQ_s_a(mdp.getStateXPosition(), mdp.getStateYPostion());
+                r += mdp.performAction(action);
+                pathlength++;
+            }
+            av_path += pathlength; 
+            av_reward += r; 
+        }
+        return "100 simulated runs of probabilistic agent results in: \n Average pathlength: " + av_path/100+ " \n Average reward: " + av_reward/100; 
+
+    }
+
+    public void finish() {
+        log.write(this.toString());
+        log.write(this.policy());
+        log.write("Minimum length of path to goal: " + walkPolicyPath());
+        log.write("Max total reward of path: " + totalr);
+        log.write(this.simulate100ProbabilisticRuns());
+        log.close();
+
     }
 
 }

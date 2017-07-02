@@ -294,8 +294,6 @@ public class MarkovDecisionProblem {
     /////////////////////////////////////////////////////////
     /// SETTERS
     /////////////////////////////////////////////////////////
-
-
     /**
      * Sets the field with the given x and y coordinate to the given field.
      * Updates the visual display.
@@ -407,9 +405,8 @@ public class MarkovDecisionProblem {
     /////////////////////////////////////////////////////////
     /// GETTERS
     /////////////////////////////////////////////////////////
- 
     /**
-     *  @author Lisa Tostrams s4386167
+     * @author Lisa Tostrams s4386167
      * @return probability of performing action
      */
     public double getP_action() {
@@ -419,6 +416,7 @@ public class MarkovDecisionProblem {
 
     /**
      * ADDED by @author Lisa Tostrams s4386167
+     *
      * @return probability of taking sidestep
      */
     public double getP_sidestep() {
@@ -427,18 +425,19 @@ public class MarkovDecisionProblem {
 
     /**
      * ADDED by @author Lisa Tostrams s4386167
+     *
      * @return probability of taking backstep
      */
     public double getP_backstep() {
         return pBackstep;
     }
 
-     /**
+    /**
      * ADDED by @author Lisa Tostrams s4386167
+     *
      * @return reward at location x, y
      */
     public double getReward(int x, int y) {
-
 
         switch (landscape[x][y]) {
             case EMPTY:
@@ -456,8 +455,9 @@ public class MarkovDecisionProblem {
         return 0;
     }
 
-     /**
+    /**
      * ADDED by @author Lisa Tostrams s4386167
+     *
      * @return reward of taking action a at current position
      */
     public double getR_a_s(Action a) {
@@ -492,8 +492,9 @@ public class MarkovDecisionProblem {
         return 0;
     }
 
-     /**
+    /**
      * ADDED by @author Lisa Tostrams s4386167
+     *
      * @return x index when action a is performed
      */
     public int getX_a(Action a) {
@@ -521,8 +522,9 @@ public class MarkovDecisionProblem {
         return xPosition;
     }
 
-     /**
+    /**
      * ADDED by @author Lisa Tostrams s4386167
+     *
      * @return y index when action a is performed
      */
     public int getY_a(Action a) {
@@ -631,7 +633,6 @@ public class MarkovDecisionProblem {
         }
     }
 
-   
     /////////////////////////////////////////////////////////
     /// DISPLAY STUFF
     /////////////////////////////////////////////////////////

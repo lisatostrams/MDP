@@ -27,6 +27,11 @@ public class ValueIterationAlgorithm {
     Log log;
     int count = 0;
 
+    /**
+     * build algorithm based on MDP
+     *
+     * @param mpd
+     */
     public ValueIterationAlgorithm(MarkovDecisionProblem mpd) {
         width = mpd.getWidth();
         height = mpd.getHeight();
@@ -41,6 +46,9 @@ public class ValueIterationAlgorithm {
 
     }
 
+    /**
+     * initialize V and Q values to zero
+     */
     private void initializeVQ() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -52,6 +60,9 @@ public class ValueIterationAlgorithm {
         }
     }
 
+    /**
+     * Update for all states and all actions
+     */
     public void update() {
         convergence = true;
         for (int x = 0; x < width; x++) {
@@ -73,10 +84,22 @@ public class ValueIterationAlgorithm {
 
     }
 
+    /**
+     * return where the v-values have converged
+     *
+     * @return
+     */
     public boolean converged() {
         return convergence;
     }
 
+    /**
+     * Calculate the sum of the transistion proabilities times the reward +
+     * value of next state for Action action
+     *
+     * @param action
+     * @return
+     */
     private double sum_T_R_V(Action action) {
         double sum = 0;
         for (int a = 0; a < actions; a++) {
@@ -98,6 +121,13 @@ public class ValueIterationAlgorithm {
 
     }
 
+    /**
+     * return the maximum value of Q at state x,y for all actions
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     private double maxQ_s_a(int x, int y) {
 
         double mv = -1000000;
@@ -112,6 +142,13 @@ public class ValueIterationAlgorithm {
         return mv;
     }
 
+    /**
+     * return the action that leads to the maximum Q value
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     private Action max_argQ_s_a(int x, int y) {
         double mv = -1000000;
         Action max = null;
@@ -130,6 +167,11 @@ public class ValueIterationAlgorithm {
         return max;
     }
 
+    /**
+     * String representation: V values at every state
+     *
+     * @return
+     */
     @Override
     public String toString() {
         String str = "V(S) = \n";
@@ -143,6 +185,11 @@ public class ValueIterationAlgorithm {
 
     }
 
+    /**
+     * string representation of policy
+     *
+     * @return
+     */
     public String policy() {
         String str = "Policy p(S) = \n";
         for (int i = height - 1; i >= 0; i--) {
@@ -159,6 +206,11 @@ public class ValueIterationAlgorithm {
         return str;
     }
 
+    /**
+     * deterministically walk the policy path
+     *
+     * @return length of path
+     */
     public int walkPolicyPath() {
         int pathlength = 0;
         totalr = 0;
@@ -174,6 +226,11 @@ public class ValueIterationAlgorithm {
 
     }
 
+    /**
+     * simulate 100 probabilistic runs of the agent
+     *
+     * @return
+     */
     public String simulate100ProbabilisticRuns() {
         mdp.setStochastic();
         double av_path = 0;
@@ -182,20 +239,23 @@ public class ValueIterationAlgorithm {
             int pathlength = 0;
             double r = 0;
             mdp.restart();
-            
+
             mdp.setShowProgress(false);
             while (!mdp.isTerminated()) {
                 Action action = max_argQ_s_a(mdp.getStateXPosition(), mdp.getStateYPostion());
                 r += mdp.performAction(action);
                 pathlength++;
             }
-            av_path += pathlength; 
-            av_reward += r; 
+            av_path += pathlength;
+            av_reward += r;
         }
-        return "100 simulated runs of probabilistic agent results in: \n Average pathlength: " + av_path/100+ " \n Average reward: " + av_reward/100; 
+        return "100 simulated runs of probabilistic agent results in: \n Average pathlength: " + av_path / 100 + " \n Average reward: " + av_reward / 100;
 
     }
 
+    /**
+     * log results
+     */
     public void finish() {
         log.write(this.toString());
         log.write(this.policy());

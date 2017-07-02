@@ -18,8 +18,8 @@ public class Main {
             //  via_stochastic(); 
             //  via_stochastic_with_obstacles(); 
             //  via_stochastic_with_penalties();
-            
-            qla_stochastic();
+
+            //qla_stochastic();
             //qla_stochastic_with_obstacles(); 
             //qla_stochastic_with_penalties();
         }
@@ -299,7 +299,7 @@ public class Main {
         mdp2.setShowProgress(false);
         while (i++ < 1000) {
 
-            while (!mdp2.isTerminated() && mdp2.getActionsCounter()< 10000) {
+            while (!mdp2.isTerminated() && mdp2.getActionsCounter() < 10000) {
                 qla.experience(qla.policy_currentState());
                 //System.out.println(qla.toString());
                 //System.out.println(qla.policy());

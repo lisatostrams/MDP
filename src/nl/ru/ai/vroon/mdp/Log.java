@@ -29,8 +29,8 @@ public class Log {
 
     /**
      *
-     * @param mdp
-     * @param network
+     * @param mdp naam van probleem
+     * 
      */
     public Log(String mdp) {
         this.mdpname = mdp;
@@ -50,6 +50,10 @@ public class Log {
         }
     }
     
+   /**
+    * string to write to log file
+    * @param write 
+    */
    public void write(String write) {
         try {
             writer.write(write);
@@ -58,7 +62,10 @@ public class Log {
         }
    }
     
-
+ /**
+  * close writer
+  * wait before opening new file
+  */
    public void close() {
         try {
             writer.close();

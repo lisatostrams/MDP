@@ -10,7 +10,7 @@ import java.util.Vector;
 
 /**
  *
- * @author Lisa Tostrams s4386167
+ * @author Lisa Tostrams s4386167 Q-learning class
  */
 public class QLearningAlgorithm {
 
@@ -27,6 +27,11 @@ public class QLearningAlgorithm {
 
     Random rand = new Random();
 
+    /**
+     * create algorithm based on MDP
+     *
+     * @param mpd
+     */
     public QLearningAlgorithm(MarkovDecisionProblem mpd) {
         width = mpd.getWidth();
         height = mpd.getHeight();
@@ -41,6 +46,9 @@ public class QLearningAlgorithm {
 
     }
 
+    /**
+     * initialize Q arbitrarily
+     */
     private void initializeQ() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -51,21 +59,31 @@ public class QLearningAlgorithm {
         }
     }
 
+    /**
+     * Experience action a, generate experience tuple
+     *
+     * @param a
+     */
     public void experience(Action a) {
-        if (mdp.getActionsCounter() == 0) {
-            totalr = 0;
-            log.write("\n");
-        }
+//        if (mdp.getActionsCounter() == 0) {
+//            totalr = 0;
+//            log.write("\n");
+//        }
         int x = mdp.getStateXPosition();
         int y = mdp.getStateYPostion();
         double r = mdp.performAction(a);
-        totalr += r; 
+//        totalr += r; 
         int x_ = mdp.getStateXPosition();
         int y_ = mdp.getStateYPostion();
-        log.write(String.format("%+1.4f", totalr)+ ", ");
+//        log.write(String.format("%+1.4f", totalr)+ ", ");
         update(new Experience(x, y, a, r, x_, y_));
     }
 
+    /**
+     * update Q value based on experience
+     *
+     * @param e
+     */
     public void update(Experience e) {
         int a = Action.valueOf(e.a.name()).ordinal();
         double Q_star_s_a = e.r + gamma * maxQ_s_a(e.x_new, e.y_new);
@@ -73,6 +91,13 @@ public class QLearningAlgorithm {
 
     }
 
+    /**
+     * return the maximum value of Q at state x,y for all actions
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     private double maxQ_s_a(int x, int y) {
         double mv = -1000000;
         for (int a = 0; a < actions; a++) {
@@ -84,6 +109,13 @@ public class QLearningAlgorithm {
         return mv;
     }
 
+    /**
+     * return the action that leads to the maximum Q value
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     private Action max_argQ_s_a(int x, int y) {
         double mv = -1000000;
         Action max = null;
@@ -98,6 +130,11 @@ public class QLearningAlgorithm {
         return max;
     }
 
+    /**
+     * String representation: max Q values at every state
+     *
+     * @return
+     */
     @Override
     public String toString() {
         String str = "";
@@ -111,14 +148,18 @@ public class QLearningAlgorithm {
 
     }
 
+    /**
+     * string representation of policy
+     *
+     * @return
+     */
     public String policy() {
         String str = "Policy p(S) = \n";
         for (int i = height - 1; i >= 0; i--) {
             for (int j = 0; j < width; j++) {
                 if (max_argQ_s_a(j, i) == null) {
                     str += ("|       |");
-                } //String.format("%1$"+5+"s", max_argQ_s_a(j,i).toString());
-                else {
+                } else {
                     str += ("| " + String.format("%1$" + 6 + "s", max_argQ_s_a(j, i).toString()) + " |");
                 }
             }
@@ -127,10 +168,20 @@ public class QLearningAlgorithm {
         return str;
     }
 
+    /**
+     * set greedy epsilon
+     *
+     * @param set
+     */
     public void setGreedyEpsilon(boolean set) {
         greedy_epsilon = set;
     }
 
+    /**
+     * return action according to policy for current state: pi(s)
+     *
+     * @return
+     */
     public Action policy_currentState() {
         Action action = max_argQ_s_a(mdp.getStateXPosition(), mdp.getStateYPostion());
         if (action == null) {
@@ -146,6 +197,11 @@ public class QLearningAlgorithm {
         return max_argQ_s_a(mdp.getStateXPosition(), mdp.getStateYPostion());
     }
 
+    /**
+     * deterministically walk the policy path
+     *
+     * @return length of path
+     */
     public int walkPolicyPath() {
         int pathlength = 0;
         totalr = 0;
@@ -161,6 +217,11 @@ public class QLearningAlgorithm {
 
     }
 
+    /**
+     * simulate 100 probabilistic runs of the agent
+     *
+     * @return
+     */
     public String simulate100ProbabilisticRuns() {
 
         mdp.setStochastic();
@@ -184,12 +245,15 @@ public class QLearningAlgorithm {
 
     }
 
+    /**
+     * log results
+     */
     public void finish() {
-//        log.write(this.toString());
-//        log.write(this.policy());
-//        log.write("Minimum length of path to goal: " + walkPolicyPath());
-//        log.write("Maximum total reward of path: " + totalr);
-//        log.write(this.simulate100ProbabilisticRuns());
+        log.write(this.toString());
+        log.write(this.policy());
+        log.write("Minimum length of path to goal: " + walkPolicyPath());
+        log.write("Maximum total reward of path: " + totalr);
+        log.write(this.simulate100ProbabilisticRuns());
         log.close();
 
     }

@@ -8,6 +8,8 @@ package nl.ru.ai.vroon.mdp;
 /**
  *
  * @author Lisa Tostrams s4386167
+ * class to contain tuple for experience
+ * public attributes.. sorry
  */
 public class Experience {
     int x;

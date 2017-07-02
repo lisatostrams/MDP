@@ -1,0 +1,16 @@
+Logfile for mdp Value_Iteration_4x3_gamma_0.9
+V(S) = 
+| +0.668 || +0.811 || +0.936 || +0.000 |
+| +0.532 || +0.000 || +0.621 || +0.000 |
+| +0.367 || +0.315 || +0.446 || +0.185 |
+
+Policy p(S) = 
+|  RIGHT ||  RIGHT ||  RIGHT ||       |
+|     UP ||       ||     UP ||       |
+|     UP ||  RIGHT ||     UP ||   LEFT |
+
+Minimum length of path to goal: 5
+Max total reward of path: 0.6
+100 simulated runs of probabilistic agent results in: 
+ Average pathlength: 6.44 
+ Average reward: 0.4160000000000001

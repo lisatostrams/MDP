@@ -1,0 +1,29 @@
+Logfile for mdp Q_learning_10x10_gamma_1.0_epsilon_0.1
+| +9.037 || +8.837 || +9.197 || +9.277 || +9.117 || +9.077 || +9.317 || -0.004 || +9.997 || -0.003 |
+| +8.797 || +9.117 || +9.157 || +9.077 || +9.477 || +9.037 || +9.397 || -0.001 || +9.957 || +9.997 |
+| +8.797 || +9.077 || +9.117 || +9.157 || +9.197 || +9.317 || +9.277 || -0.003 || +9.917 || +9.877 |
+| +9.117 || +9.117 || +9.157 || -0.002 || +9.397 || +9.597 || +9.317 || -0.000 || +9.837 || +9.917 |
+| +8.797 || +8.877 || +9.197 || -0.002 || +9.277 || +9.477 || +9.357 || -0.003 || +9.717 || +9.877 |
+| +8.757 || +8.877 || +8.837 || -0.003 || +9.237 || +9.597 || +9.717 || +9.757 || +9.717 || +9.837 |
+| +8.637 || +8.677 || +8.717 || -0.001 || -0.001 || -0.003 || -0.001 || -0.000 || -0.000 || -0.001 |
+| +8.677 || +8.677 || +8.917 || -0.002 || -1.201 || -1.205 || -1.205 || -1.169 || -1.165 || -1.125 |
+| +8.957 || +8.997 || +8.477 || +8.397 || +8.037 || -1.202 || -1.207 || -1.243 || -1.169 || -1.129 |
+| +8.437 || +8.637 || +8.677 || +8.797 || +8.157 || +7.997 || -1.204 || -1.207 || -1.204 || -1.165 |
+
+Policy p(S) = 
+|  RIGHT ||     UP ||  RIGHT ||   DOWN ||   LEFT ||   LEFT ||   DOWN ||   LEFT ||  RIGHT ||   LEFT |
+|     UP ||  RIGHT ||     UP ||   DOWN ||   DOWN ||     UP ||   DOWN ||   LEFT ||     UP ||     UP |
+|   DOWN ||  RIGHT ||  RIGHT ||  RIGHT ||   DOWN ||   DOWN ||     UP ||   LEFT ||     UP ||     UP |
+|  RIGHT ||     UP ||     UP ||     UP ||  RIGHT ||   DOWN ||   DOWN ||   LEFT ||     UP ||     UP |
+|  RIGHT ||     UP ||     UP ||     UP ||     UP ||   DOWN ||   LEFT ||  RIGHT ||     UP ||     UP |
+|     UP ||     UP ||     UP ||   LEFT ||  RIGHT ||   LEFT ||  RIGHT ||  RIGHT ||     UP ||     UP |
+|  RIGHT ||     UP ||     UP ||   LEFT ||  RIGHT ||   DOWN ||   DOWN ||   DOWN ||     UP ||   LEFT |
+|     UP ||     UP ||     UP ||   DOWN ||  RIGHT ||   DOWN ||  RIGHT ||     UP ||  RIGHT ||  RIGHT |
+|   DOWN ||     UP ||   LEFT ||   DOWN ||   LEFT ||   DOWN ||   DOWN ||   DOWN ||   LEFT ||  RIGHT |
+|  RIGHT ||     UP ||   LEFT ||   LEFT ||   LEFT ||   LEFT ||   LEFT ||   LEFT ||  RIGHT ||     UP |
+
+Minimum length of path to goal: 100
+Maximum total reward of path: -4.000000000000003
+100 simulated runs of probabilistic agent results in: 
+ Average pathlength: 96.96 
+ Average reward: -2.874400000000001

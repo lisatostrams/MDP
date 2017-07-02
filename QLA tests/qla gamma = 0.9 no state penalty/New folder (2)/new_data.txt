@@ -1,0 +1,10 @@
+no \infty & 0  & 40.47 & 9.6 \\ \hline
+no \infty & 0  & 22.38 & 10.0 \\ \hline
+no \infty & 0  & 36.59 & 10.0 \\ \hline
+no \infty & 0  & 25.7 & 10.0 \\ \hline
+no \infty & 0  & 49.4 & 9.7 \\ \hline
+yes & 10& 10.0 & 19.34 & 9.9 \\ \hline
+no \infty & 0  & 20.92 & 10.0 \\ \hline
+yes & 10& 10.0 & 15.35 & 10.0 \\ \hline
+no \infty & 0  & 37.39 & 9.9 \\ \hline
+no \infty & 0  & 27.79 & 9.7 \\ \hline

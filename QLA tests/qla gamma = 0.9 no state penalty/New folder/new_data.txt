@@ -1,0 +1,10 @@
+no \infty & 0  & 25.26 & 0.92 \\ \hline
+yes &  5 &  1.0 & 6.79 & 0.78 \\ \hline
+no \infty & 0  & 89.62 & -0.19 \\ \hline
+yes &  5 &  1.0 & 8.17 & 0.98 \\ \hline
+no \infty & 0  & 100.0 & 0.0 \\ \hline
+no \infty & 0  & 25.62 & 0.7 \\ \hline
+no \infty & 0  & 37.8yes & 5 &0.95 \\ \hline
+yes &  5 &  1.0 & 8.77 & 0.96 \\ \hline
+yes &  5 &  1.0 & 6.16 & 0.64 \\ \hline
+no \infty & 0  & 83.16 & 0.28 \\ \hline

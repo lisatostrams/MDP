@@ -37,6 +37,7 @@ public class QLearningAlgorithm {
         initializeQ();
         String mdpname = "Q_learning_" + width + "x" + height + "_gamma_" + gamma + "_epsilon_" + epsilon;
         log = new Log(mdpname);
+        totalr = 0;
 
     }
 
@@ -51,12 +52,17 @@ public class QLearningAlgorithm {
     }
 
     public void experience(Action a) {
+        if (mdp.getActionsCounter() == 0) {
+            totalr = 0;
+            log.write("\n");
+        }
         int x = mdp.getStateXPosition();
         int y = mdp.getStateYPostion();
         double r = mdp.performAction(a);
+        totalr += r; 
         int x_ = mdp.getStateXPosition();
         int y_ = mdp.getStateYPostion();
-
+        log.write(String.format("%+1.4f", totalr)+ ", ");
         update(new Experience(x, y, a, r, x_, y_));
     }
 
@@ -156,6 +162,7 @@ public class QLearningAlgorithm {
     }
 
     public String simulate100ProbabilisticRuns() {
+
         mdp.setStochastic();
         double av_path = 0;
         double av_reward = 0;
@@ -165,7 +172,7 @@ public class QLearningAlgorithm {
             mdp.restart();
 
             mdp.setShowProgress(false);
-            while (!mdp.isTerminated() && pathlength <100) {
+            while (!mdp.isTerminated() && pathlength < 100) {
                 Action action = max_argQ_s_a(mdp.getStateXPosition(), mdp.getStateYPostion());
                 r += mdp.performAction(action);
                 pathlength++;
@@ -178,11 +185,11 @@ public class QLearningAlgorithm {
     }
 
     public void finish() {
-        log.write(this.toString());
-        log.write(this.policy());
-        log.write("Minimum length of path to goal: " + walkPolicyPath());
-        log.write("Maximum total reward of path: " + totalr);
-        log.write(this.simulate100ProbabilisticRuns());
+//        log.write(this.toString());
+//        log.write(this.policy());
+//        log.write("Minimum length of path to goal: " + walkPolicyPath());
+//        log.write("Maximum total reward of path: " + totalr);
+//        log.write(this.simulate100ProbabilisticRuns());
         log.close();
 
     }

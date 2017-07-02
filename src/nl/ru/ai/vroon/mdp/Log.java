@@ -52,7 +52,7 @@ public class Log {
     
    public void write(String write) {
         try {
-            writer.write(write+ "\n");
+            writer.write(write);
         } catch (IOException ex) {
             Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,6 +62,11 @@ public class Log {
    public void close() {
         try {
             writer.close();
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (IOException ex) {
             Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, ex);
         }

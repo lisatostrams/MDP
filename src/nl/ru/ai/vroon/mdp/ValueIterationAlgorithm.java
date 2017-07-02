@@ -19,7 +19,7 @@ public class ValueIterationAlgorithm {
     private int width;
     private int height;
     private int actions = Action.values().length;
-    private double gamma = 0.8;
+    private double gamma = 1;
     private MarkovDecisionProblem mdp;
     private double delta = 0.1;
     private boolean convergence = false;
@@ -164,7 +164,7 @@ public class ValueIterationAlgorithm {
         totalr = 0;
         mdp.restart();
         mdp.setDeterministic();
-        mdp.setShowProgress(true);
+        //mdp.setShowProgress(true);
         while (!mdp.isTerminated()) {
             Action action = max_argQ_s_a(mdp.getStateXPosition(), mdp.getStateYPostion());
             totalr += mdp.performAction(action);

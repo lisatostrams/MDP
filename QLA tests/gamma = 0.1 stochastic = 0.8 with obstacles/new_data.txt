@@ -1,0 +1,11 @@
+no & \infty & -\infty & 1.0 & -4.1 &  \\ \hline
+no & \infty & -\infty & 1.0 & -4.1 &  \\ \hline
+no & \infty & -\infty & 1.0 & -4.1 &  \\ \hline
+no & \infty & -\infty & 1.0 & -4.1 &  \\ \hline
+no & \infty & -\infty & 1.0 & -4.1 &  \\ \hline
+no & \infty & -\infty & 1.0 & -4.1 &  \\ \hline
+no & \infty & -\infty & 1.0 & -4.1 &  \\ \hline
+no & \infty & -\infty & 1.0 & -4.1 &  \\ \hline
+no & \infty & -\infty & 1.0 & -4.1 &  \\ \hline
+no & \infty & -\infty & 1.0 & -4.1 &  \\ \hline
+ &  &  &  &  \\ \hline

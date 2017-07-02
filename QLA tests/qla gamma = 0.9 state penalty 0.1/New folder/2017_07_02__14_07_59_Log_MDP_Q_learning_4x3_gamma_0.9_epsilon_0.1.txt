@@ -1,0 +1,15 @@
+Logfile for mdp Q_learning_4x3_gamma_0.9_epsilon_0.1
+| +0.619 || +0.799 || +0.998 || -0.002 |
+| -0.543 || -0.001 || -0.237 || -0.002 |
+| +0.713 || -0.595 || -0.550 || -0.700 |
+
+Policy p(S) = 
+|  RIGHT ||  RIGHT ||  RIGHT ||   LEFT |
+|     UP ||     UP ||   DOWN ||   LEFT |
+|     UP ||  RIGHT ||   LEFT ||   DOWN |
+
+Minimum length of path to goal: 5
+Maximum total reward of path: 0.6
+100 simulated runs of probabilistic agent results in: 
+ Average pathlength: 25.16 
+ Average reward: -1.813999999999996

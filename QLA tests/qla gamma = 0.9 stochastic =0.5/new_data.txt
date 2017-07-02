@@ -1,0 +1,10 @@
+no & \infty & -\infty & 82.98 & 2.202785 \\ \hline
+no & \infty & -\infty & 86.55 & 0.754785 \\ \hline
+no & \infty & -\infty & 60.55 & 6.7144 \\ \hline
+no & \infty & -\infty & 92.33 & -0.982416 \\ \hline
+no & \infty & -\infty & 70.14 & 5.0256 \\ \hline
+no & \infty & -\infty & 94.88 & -1.88761 \\ \hline
+no & \infty & -\infty & 74.45 & 3.94958 \\ \hline
+no & \infty & -\infty & 68.96 & 5.876 \\ \hline
+no & \infty & -\infty & 70.48 & 5.11239 \\ \hline
+no & \infty & -\infty & 83.54 & 1.276786 \\ \hline

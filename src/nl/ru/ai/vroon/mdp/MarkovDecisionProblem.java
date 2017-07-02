@@ -45,8 +45,8 @@ public class MarkovDecisionProblem {
     // These four probabilities should add up to 1
 
     // The rewards given for each state:
-    private double posReward = 1, // reward for positive end state
-            negReward = -1, // reward for negative end state
+    private double posReward = 10, // reward for positive end state
+            negReward = -10, // reward for negative end state
             noReward = -0.04;	// reward for the other states
 
     // Boolean maintaining if an end state has been reached:
@@ -55,7 +55,7 @@ public class MarkovDecisionProblem {
     // The DrawFrame this MDP uses to draw itself
     private DrawFrame frame = null;
     // The time that is waited between drawing each action performed:
-    private int waittime = 10;
+    private int waittime = 0;
     private boolean showProgress = true;
 
     // Counts the number of actions that has been performed
@@ -126,7 +126,7 @@ public class MarkovDecisionProblem {
         initXPos = 0;
         initYPos = 0;
 
-        deterministic = false;
+        deterministic = true;
 
         pPerform = 0.8;
         pSidestep = 0.2;
@@ -271,9 +271,9 @@ public class MarkovDecisionProblem {
      */
     public double getReward() {
         // If we are terminated, no rewards can be gained anymore (i.e. every action is futile):
-//        if (terminated) {
-//            return 0;
-//        }
+        if (terminated) {
+            return 0;
+        }
 
         switch (landscape[xPosition][yPosition]) {
             case EMPTY:
@@ -294,13 +294,7 @@ public class MarkovDecisionProblem {
     /////////////////////////////////////////////////////////
     /// SETTERS
     /////////////////////////////////////////////////////////
-    public void setActionSteps(int s) {
-        this.actionsCounter = s;
-    }
 
-    public void setTerminated() {
-        terminated = false;
-    }
 
     /**
      * Sets the field with the given x and y coordinate to the given field.
@@ -314,7 +308,7 @@ public class MarkovDecisionProblem {
         if (xpos >= 0 && xpos < width && ypos >= 0 && ypos < height) {
             landscape[xpos][ypos] = field;
         }
-        pDrawMDP();
+        //pDrawMDP();
     }
 
     /**
@@ -329,9 +323,9 @@ public class MarkovDecisionProblem {
         if (landscape[xpos][ypos] == Field.EMPTY) {
             terminated = false;
         } else {
-            terminated = true; 
+            terminated = true;
         }
-        pDrawMDP();
+        // pDrawMDP();
     }
 
     /**
@@ -413,33 +407,47 @@ public class MarkovDecisionProblem {
     /////////////////////////////////////////////////////////
     /// GETTERS
     /////////////////////////////////////////////////////////
+ 
+    /**
+     *  @author Lisa Tostrams s4386167
+     * @return probability of performing action
+     */
     public double getP_action() {
 
         return pPerform;
     }
 
+    /**
+     * ADDED by @author Lisa Tostrams s4386167
+     * @return probability of taking sidestep
+     */
     public double getP_sidestep() {
         return pSidestep / 2;
     }
 
+    /**
+     * ADDED by @author Lisa Tostrams s4386167
+     * @return probability of taking backstep
+     */
     public double getP_backstep() {
         return pBackstep;
     }
 
+     /**
+     * ADDED by @author Lisa Tostrams s4386167
+     * @return reward at location x, y
+     */
     public double getReward(int x, int y) {
-        // If we are terminated, no rewards can be gained anymore (i.e. every action is futile):
-//        if (terminated) {
-//            return 0;
-//        }
+
 
         switch (landscape[x][y]) {
             case EMPTY:
                 return noReward;
             case REWARD:
-                
+
                 return posReward;
             case NEGREWARD:
-                
+
                 return negReward;
         }
 
@@ -448,8 +456,14 @@ public class MarkovDecisionProblem {
         return 0;
     }
 
+     /**
+     * ADDED by @author Lisa Tostrams s4386167
+     * @return reward of taking action a at current position
+     */
     public double getR_a_s(Action a) {
-        if(terminated) return 0; 
+        if (terminated) {
+            return 0;
+        }
         switch (a) {
             case UP:
                 if (yPosition < (height - 1) && landscape[xPosition][yPosition + 1] != Field.OBSTACLE) {
@@ -478,8 +492,14 @@ public class MarkovDecisionProblem {
         return 0;
     }
 
+     /**
+     * ADDED by @author Lisa Tostrams s4386167
+     * @return x index when action a is performed
+     */
     public int getX_a(Action a) {
-        if(terminated) return xPosition; 
+        if (terminated) {
+            return xPosition;
+        }
         switch (a) {
             case UP:
 
@@ -501,8 +521,14 @@ public class MarkovDecisionProblem {
         return xPosition;
     }
 
+     /**
+     * ADDED by @author Lisa Tostrams s4386167
+     * @return y index when action a is performed
+     */
     public int getY_a(Action a) {
-        if(terminated) return yPosition; 
+        if (terminated) {
+            return yPosition;
+        }
         switch (a) {
             case UP:
                 if (yPosition < (height - 1) && landscape[xPosition][yPosition + 1] != Field.OBSTACLE) {
@@ -605,13 +631,7 @@ public class MarkovDecisionProblem {
         }
     }
 
-    public Action getAction() {
-        return recentaction;
-    }
-
-    
-    
-    
+   
     /////////////////////////////////////////////////////////
     /// DISPLAY STUFF
     /////////////////////////////////////////////////////////
@@ -672,7 +692,5 @@ public class MarkovDecisionProblem {
     public void setShowProgress(boolean show) {
         showProgress = show;
     }
-    
-    
 
 }
